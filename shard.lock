@@ -1,0 +1,6 @@
+version: 1.0
+shards:
+  rocksdb:
+    github: maiha/rocksdb.cr
+    version: 0.5.1
+
