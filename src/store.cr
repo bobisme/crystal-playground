@@ -19,7 +19,6 @@ module Store
     include Iterator(Tuple(T, T))
     getter :curr, :value
     @iter : RocksDB::Iterator(T)
-    # @curr : Tuple(String, String)?
     @stopped = false
     @value : String?
 
@@ -75,36 +74,10 @@ module Store
 
     def prefix(key_prefix : String)
       PrefixIter.new(@db, key_prefix)
-      # iter = @db.new_iterator
-      # iter.seek(key_prefix)
-      # Iterator.of do
-      #   if iter.valid? && iter.key.starts_with?(key_prefix)
-      #     k = iter.key
-      #     v = iter.value
-      #     iter.next
-      #     next k, v
-      #   else
-      #     iter.close
-      #     Iterator.stop
-      #   end
-      # end
     end
 
     def set_prefix(key_prefix : String)
       SetPrefixIter.new(@db, key_prefix)
-      # iter = @db.new_iterator
-      # iter.seek(key_prefix)
-      # Iterator.of do
-      #   if iter.valid? && iter.key.starts_with?(key_prefix)
-      #     k = iter.key
-      #     v = iter.value
-      #     iter.next
-      #     next k, v
-      #   else
-      #     iter.close
-      #     Iterator.stop
-      #   end
-      # end
     end
 
     def delete(key : String)
@@ -132,29 +105,6 @@ module Store
 
     delegate :valid?, close, rewind, to: @iter
   end
-
-  # class PrefixIterator
-  #   @iter : RocksDB::Iterator(String)
-  #
-  #   def initialize(db : RocksDB::DB, @prefix : String)
-  #     @iter = db.new_iterator
-  #     @iter.seek(@prefix)
-  #   end
-  #
-  #   def valid?
-  #     @iter.valid? && @iter.key.starts_with?(@prefix)
-  #   end
-  #
-  #   def next
-  #     @iter.next
-  #   end
-  #
-  #   def value
-  #     key.lchop(@prefix)
-  #   end
-  #
-  #   delegate key, close, to: @iter
-  # end
 
   class UnionIterator(T)
     include Iterator(T)
