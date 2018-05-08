@@ -1,5 +1,5 @@
 require "./crystal-playground/*"
-require "store"
+require "./store"
 
 class Main
   def run
